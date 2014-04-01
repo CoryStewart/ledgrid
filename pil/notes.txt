@@ -1,4 +1,10 @@
 Installing PIL (python imaging library on mac):
-sudo easy_install pip
-sudo pip install PIL
+# sudo easy_install pip
+opkg install python-pip python-setuptools python-smbus
+pip install Adafruit_BBIO           # for convenience but not sure I'll use for the ledgrid project
+# sudo pip install PIL
+pip install python-imaging
 
+
+# Testing:
+python pil_demo.py

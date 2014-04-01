@@ -1,0 +1,425 @@
+================================================================================
+The WORKING BBB ledgrid has:
+    /boot dir:
+        cape-bone-pru-00A0-dts
+        am335x-boneblack.dtb       am335x-boneblack.dts_orig  am335x-boneblack.pru.dts
+        am335x-boneblack.dtb_orig  am335x-boneblack.pru.dtb   am335x-boneblack.pru.dts~
+    /lib/firmware dir:
+        cape-bone-pru-00A0.dtbo
+    uname -a:
+        Linux beaglebone 3.8.13 #1 SMP Tue Jun 18 02:11:09 EDT 2013 armv7l GNU/Linux
+    $PINS:
+        pin 12 (44e10830) 00000006 pinctrl-single
+        pin 88 (44e10960) 00000035 pinctrl-single
+The NON-WORKING BBB ledgrid has:
+        Linux beaglebone 3.8.13 #1 SMP Wed Sep 4 09:09:32 CEST 2013 armv7l GNU/Linux
+    $PINS:
+        pin 12 (44e10830) 00000027 pinctrl-single
+        pin 88 (44e10960) 0000002f pinctrl-single
+
+================================================================================
+ON GOOD BBB:
+root@beaglebone:/boot# diff am335x-boneblack.dts_orig am335x-boneblack.pru.dts
+62c62
+<           pinctrl-single,pins = <0x54 0x7 0x58 0x17 0x5c 0x7 0x60 0x17>;
+---
+>           pinctrl-single,pins = <0x30 0x06 0x54 0x07 0x58 0x17 0x5c 0x07 0x60 0x17>;
+557c557
+<           status = "disabled";
+---
+>           status = "okay";
+878c878
+<               linux,default-trigger = "heartbeat";
+---
+>               linux,default-trigger = "none";
+1036a1037,1044
+>             slot@103 {
+>                 ti,cape-override;
+>                 compatible = "kernel-command-line", "runtime";
+>                 board-name = "Bone-Black-PRU";
+>                 version = "00A0";
+>                 manufacturer = "na";
+>                 part-number = "BB-BONE-PRU";
+>             };
+1183a1192,1200
+>               };
+>           };
+>
+>           cape@14 {
+>               part-number = "BB-BONE-PRU";
+>
+>               version@00A0 {
+>                   version = "00A0";
+>                   dtbo = "cape-bone-pru-00A0.dtbo";
+================================================================================
+Backing Up the entire BBB (eMMC):
+    - Boot the BBB from an sdCard bootable image & ssh to it.
+    - Make sure the DST file doesn't exist: mac/linbox /Users/cstewart/Desktop/BBB_backup20140330.img 
+    - From the BBB:
+        NOTE:   Some research may be necessary to determine if the 'M' at the END of the LINE above needs to be 
+                capital or lower case. It may be that linux needs M and macs need m ???
+        NOTE:   A forum poster indicated the eMMC is installed at /dev/mmcblk0 if you boot from eMMC, but at
+                /dev/mmcblk1 if you booted from sdcard.  CHECK.
+        To linbox:
+            dd if=/dev/mmcblk1 bs=1M | ssh cstewart@corymbp.local 'dd of=/home/cstewart/Desktop/BBB_backup20140330.img bs=1M'
+        -or- To CoryMBP:
+            dd if=/dev/mmcblk0 bs=1M | ssh cstewart@linbox.local 'dd of=/Users/cstewart/Desktop/BBB_backup20140330.img bs=1m'
+Restoring the backup to a BBB (eMMC):
+    - Boot the BBB from an sdCard bootable image & ssh to it.
+    - From the BBB:
+        NOTE:   Some research may be necessary to determine if the 'M' at the END of the LINE above needs to be 
+                capital or lower case. It may be that linux needs M and macs need m ???
+        NOTE:   A forum poster indicated the eMMC is installed at /dev/mmcblk0 if you boot from eMMC, but at
+                /dev/mmcblk1 if you booted from sdcard.  CHECK.
+        To linbox:
+            ssh cstewart@linbox.local "dd if=/home/cstewart/Desktop/BBB_backup20140330.img bs=1M" | dd of=/dev/mmcblk1  bs=1M
+        -or- To CoryMBP:
+            ssh cstewart@corymbp.local "dd if=/Users/cstewart/Desktop/BBB_backup20140330.img bs=1M" | dd of=/dev/mmcblk1  bs=1M
+        ** restoring takes about 10 minutes **
+
+================================================================================
+Things to do / check afer upgrading angstrom:
+- set ntp service, timezone
+- chsh (change shell to bash)
+- setup cape device tree overlays in /bin/firmware
+- fix wireless?
+- /etc/resolv.conf ???
+================================================================================
+To disable capes, put the following in /boot/uEnv.txt
+    optargs=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN
+or
+    echo "-6" > $SLOTS
+        (to remove slot 6)
+================================================================================
+WS2812 LED Strips:
+    http://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/
+================================================================================
+http://pinmux.tking.org
+================================================================================
+Angstom linux admin stuff:
+    www.gigamegablog.com/2012/01/29/beaglebone-linux-101-configuring-angstrom-linux
+Change default shell:
+    chsh -s /bin/bash
+================================================================================
+LINKS Used:
+    - Very Good!:  http://learn.adafruit.com/introduction-to-the-beaglebone-black-device-tree
+    - http://www.youtube.com/watch?v=wui_wU1AeQc : Derek Molloy's "Beaglebone: Introduction to GPIOs Using Device Tree Overlays"
+    - Google search for "CBB-EEProto" to find PDF for my bare cape board.
+    - http://papermint-designs.com/community/node/331 : useful for EEPROM pgming ideas but I found the CBB-EEProto PDF better.
+        - http://azkeller.com/blog/?p=62 : utils for writing the EEPROM
+    - http://hipstercircuits.com/category/pru/ : PRU device tree stuff, Including interfacing with Python.
+    - http://www.jameco.com/Jameco/Products/ProdDS/2176149.pdf : BBB SRM Rev A5.2
+    - http://beagleboard.org/static/beaglebone/latest/Docs/Hardware/BONE_SRM.pdf
+    - SRM System Reference Manual: https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SRM.pdf?raw=true
+    - Schematic:  https://github.com/CircuitCo/BeagleBone-Black/blob/master/BBB_SCH.pdf?raw=true 
+    - BBB TWIKI:  http:/elinux.org/Beagleboard:BeagleBoneBlack
+Github repo of all docs and all revisions:
+    - https://github.com/CircuitCo/BeagleBone-Black    
+================================================================================
+CAPE EEPROM basic checks to verify it is there:
+- The cape board I used for ledgrid came from "Logic Supply".  
+  Google "CBB-EEProto" to find the PDF documentation which is very good.
+- Both dip switches are towards the P9 header, which is a 11.  So address
+  is 0x54 + 0x03 = 0x57.
+- Jumper must be INSTALLED to WRITE.
+- Reading:
+    cd /sys/bus/i2c/devices/1-0057
+    hexdump -n 244 -C eeprom
+- Writing:
+    cd /sys/bus/i2c/devices/1-0057
+    echo "Test" > eeprom
+        If it times out you may have the Write Protect jumper UNINSTALLED. (protected)
+        Or you may have the wrong I2C address.
+================================================================================
+CAPE EEPROM proper programming: (using the 'azkeller' link above)
+    cd ~/ledgrid/cape_eeprom_creator
+    wget http://azkeller.com/blog/wp-content/uploads/2012/08/mkeeprom.ec
+    gcc -o mkeeprom mkeeprom.c
+    ./mkeeprom          :
+        | ---EEPROM MAKER---
+        | 
+        | This is a program to make the EEPROM data file for a BeagleBone Cape.
+        | 
+        | This program produces an output file named: data.eeprom
+        | The data file follows EEPROM Format Revision 'A0'
+        | This data file can be put in the BeagleBone EEPROM by this command on a BeagleBone:
+        |    > cat data.eeprom >/sys/bus/i2c/drivers/at24/3-005x/eeprom
+        |          Where:  5x is 54, 55, 56, 57 depending on Cape addressing.
+        |          NOTE:  See blog.azkeller.com for more details.
+        | 
+        | +++ No warranties or support is implied - sorry for CYA +++
+        | 
+        | Enter Name of Board in ASCII (max 32): cory-ledgrid
+        | Enter HW Version of Board in ASCII (max 4): 00A0
+        | Enter Name of Manufacturer in ASCII (max 16): silicon-circuits
+        | Enter Part Number in ASCII (max 16): ledgrid
+        | Enter Serial Number in ASCII (max 16): 1
+        | Enter MAX Current (mA) on VDD_3V3EXP Used by Cape (Range 0 to 250mA): 0
+        | Enter MAX Current (mA) on VDD_5V Used by Cape (Range 0 to 1000mA): 0
+        | Enter MAX Current (mA) on SYS_5V Used by Cape (Range 0 to 250mA): 50
+        | Enter Current (mA) Supplied on VDD_5V by Cape (Range 0 to 65535mA): 0
+        | 
+        | Enter Number of Pins Used by Cape (Range 0 to 74): 1
+        | 
+        | Get data for pin 1
+        |     PIN # 1 - Enter Connector number (8 or 9): 8
+        |     PIN # 1 - Enter pin number (1 through 46): 12
+        |     PIN # 1 P8_12 - Usage? 1=pin used, 0=unused: 1
+        |     PIN # 1 P8_12 - Type? 1=input, 2=output, 3=bidirectional: 2
+        |     PIN # 1 P8_12 - Slew? 0=fast, 1=slow: 0
+        |     PIN # 1 P8_12 - RX Enabled? 0=disabled, 1=enabled: 0
+        |     PIN # 1 P8_12 - Pullup or Pulldown? 0=pulldown, 1=pullup: 0
+        |     PIN # 1 P8_12 - Pull up-down Enabled? 0=enabled, 1=disabled: 0
+        |     PIN # 1 P8_12 - Pin Mux Mode? (0 through 7): 7
+        | 
+        | Creating output file... ./data.eeprom
+
+    - Now to program the EEPROM, make sure there is a jumper on the WP write-protect jumper, and:
+        cat data.eeprom > /sys/bus/i2c/devices/1-0057/eeprom
+    - Now verify the write took:
+        hexdump -n 244 -C /sys/bus/i2c/devices/1-0057/eeprom
+    - Reboot & check if the cap was recognized:
+        cat $SLOTS
+
+
+================================================================================
+This command may also be useful but i2c devices 0x54 - 0x57 show up as UU.
+Not sure what that means but probably because they're define in the device tree.
+    i2cdetect -y -r 1
+        -y makes it not repeat forever
+        -r 1 : selects I2C2 (instance 2)  (0 based count)
+================================================================================
+CAPE I2C2 (for eeprom):
+    P9-19 : SCL
+    P9-20 : SDA
+================================================================================
+Enabling the PRU at boot time:
+cory: these work but are a bit old because they recommend changing the boot
+      device tree rather than the overlay.  Originally, this was the only
+      way because the overlay method didn't work.  But now overlay does work.
+
+- Run these commands to backup the current version of the BBB Device Tree:
+    cd /boot
+    cp am335x-boneblack.dtb am335x-boneblack.dtb_orig
+    dtc -I dtb -O dts am335x-boneblack.dtb > am335x-boneblack.dts_orig
+    cp !$ am335x-boneblack.dts_pru
+- Edit the new am335x-boneblack.dts_pru file, changing line FROM:
+    *** Note: errors in this file will brick your BBB.
+    *** Technically not brick it because the eMMC can still be read by
+    *** creating a boot SDcard and booting from it and mounting the eMMC.
+    *** Still, be very careful...
+    pruss@4a30000 {
+        ...
+        status = "disabled";
+        ...
+    }
+  TO:
+    pruss@4a30000 {
+        ...
+        status = "okay";
+        ...
+    }
+- Another edit to change the BBB USR0 LED so it can be used for PRU
+  debugging is, FROM:
+        gpio-leds {
+        compatible = "gpio-leds";
+        pinctrl-names = "default";
+        pinctrl-0 = <0x3>;
+        led0 {
+                                        label = "beaglebone:green:usr0";
+                                        gpios = <0x5 0x15 0x0>;
+                                        linux,default-trigger = "heartbeat";
+                                        default-state = "off";
+        };
+  TO: (heartbeat line):
+                                        linux,default-trigger = "none";
+- Another edit is to make sure I2C2 is enabled.  Search for 'ti,hwmods = "i2c2"' and change
+  'status' to 'okay'.
+- Then compile & replace with these commands and REBOOT:
+    dtc -I dts -O dtb am335x-boneblack.dts_pru > am335x-boneblack.dtb_pru
+    cp am335x-boneblack.dtb_pru am335x-boneblack.dtb
+    <REBOOT>
+
+================================================================================
+Setting the time:
+	/usr/bin/ntpdate -b -s -u pool.ntp.org
+
+Setting the time automatically:
+    opkg update
+    opkg list | grep ntp
+    opkg install ntp
+    Create the file '/etc/ntp.conf' with:
+        # This is the most basic ntp configuration file
+        # The driftfile must remain in a place specific to this
+        # machine - it records the machine specific clock error
+         
+        driftfile /etc/ntp.drift
+        logfile /var/log/ntpd.log
+         
+        # NTP Servers for Ireland from www.pool.ntp.org
+        server 0.pool.ntp.org
+        server 1.pool.ntp.org
+        server 2.pool.ntp.org
+        server 3.pool.ntp.org
+         
+        # Using local hardware clock as fallback
+        # Disable this when using ntpd -q -g -x as ntpdate or it will sync to itself
+        # server 127.127.1.0
+        # fudge 127.127.1.0 stratum 14
+         
+        # Defining a default security setting
+        # 10.0.1.0 is the router on the network
+        restrict 10.0.1.0 mask 255.255.255.0 nomodify notrap
+    Set the timezone:
+        cd /usr/share/zoneinfo
+        ls
+        cd America
+        rm /etc/localtime
+        ln -s /usr/share/zoneinfo/America/Chicago /etc/localtime
+    Enabling the NTP service:
+        systemctl ntpdate.service
+        systemctl ntpd.service
+            The 2nd service needs to be modified:
+                cd /lib/systemd/system
+                (edit the file 'ntpdate.service' to):
+                    [Unit]
+                    Description=Network Time Service (one-shot ntpdate mode)
+                    Before=ntpd.service
+                     
+                    [Service]
+                    Type=oneshot
+                    ExecStart=/usr/bin/ntpd -q -g -x
+                    ExecStart=/sbin/hwclock --systohc
+                    RemainAfterExit=yes
+                     
+                    [Install]
+                    WantedBy=multi-user.target
+        reboot
+        timedatectl ; command to display all time info
+
+
+Installing BBIO:
+	opkg update && opkg install python-distutils
+	git clone git://github.com/adafruit/adafruit-beaglebone-io-python.git
+	cd adafruit-beaglebone-io-python
+	python setup.py install
+	cd .. && rm -rf adafruit-beaglebone-io-python
+
+Added:
+    /etc/resolv.conf:
+    nameserver 8.8.8.8
+
+================================================================================
+Derek Malloy's Device Tree video & files:   ** Excellent **
+    http://derekmolloy.ie/beaglebone/beaglebone-gpio-programming-on-arm-embedded-linux/
+- /boot directory contains the compiled DTB's
+   - these are loaded only at boot.  use device overlays to modify at runtime
+- .profile:
+    export SLOTS=/sys/devices/bone_capemgr.9/slots
+    export PINS=/sys/kernel/debug/pinctrl/44e10800.pinmux/pins
+- cat $SLOTS
+    Prints out what things are connected (0-3 are capes, 4-? are "virtual" slots)
+- cat $PINS
+    Prints out the config for each pin (see Derek's PDF)
+- Derek's files:
+    git clone git://github.com/derekmolloy/boneDeviceTree
+        boneDeviceTree/overlay : contains the overlay files
+            DM-GPIO-Test.dts : example DT overlay file that configs some GPIOs
+            build : build script to compile .dts
+                - copy *.dtbo to /lib/firmware
+- Cory's ledgrid files:
+    cd ~/ledgrid/device_tree_overlay
+    vi cory-ledgrid.dts
+    ./build
+    cp cory-ledgrid-00A0.dtbo /lib/firmware/.
+    cd /lib/firmware
+    echo cory-ledgrid > $SLOTS
+- Now to APPLY the OVERLAY:
+    - cd /lib/firmware
+    - cat $SLOTS
+    - cat $PINS | grep 878|984|834|830|824
+        To see our changes to the pins' configs
+    - echo DM-GPIO-Test > $SLOTS
+        To apply the overlay
+        - For ledgrid:
+            echo cory-ledgrid > $SLOTS
+    - cat $PINS | grep 878|984|834|830|824
+        (grep by the offset) To see these pins' modes before applying the overlay
+        For ledgrid:
+            # Header Pin:       P8_12
+            # $PINS:            12
+            # Addr/Offset:      0x830/030
+            # GPIO No:          44
+            # Name:             GPIO1_12
+            # Mode7:            gpio1[12]
+            # **Mode6**:        pr1_pru0_pru_r30_14
+            # Mode5:            --
+            # Mode4:            EQEP2A_IN
+            # Mode3:            MMC2_DAT0
+            # Mode2:            MMC1_DAT4
+            # Mode1:            LCD_DATA19
+            # Mode0:            GPMC_AD12
+            # AM3359 Pin:       T12
+            cat $PINS | grep 830
+
+- Now we can program the GPIO via the kernel user space file structure:
+    - cd /sys/class/gpio
+    - ls -al
+    - export the gpio pins to USER space:
+        - echo 60 > export
+        - ls -al
+            now we have a dir 'gpio60'
+        - cd gpio60
+        - cat direction  (should be 'in')
+        - echo "out" > direction
+        - cat direction (should be 'out')
+        - echo 1 > value        (led should light (if you have one connected))
+    - cd /sys/class/gpio
+        - echo 15 > export
+        - cd gpio15
+        - cat direction
+        - cat value  (reads the button)
+        - echo 15 > unexport
+            Changes back from USER space to KERNEL space (releases the gpio to kernel)
+ch /sys/kernel/debug/pinctrl/44e10800.pinmux
+ls -al
+cat pinmux-pins | more
+    see which pins are claimed or unclaimed
+cat pingroups | more
+    see which pins are allocated to function groups
+
+boneDeviceTree/gpio : directory with CPP code for doing gpio test application
+
+
+================================================================================
+Beagle Bone Black Cape EEPROM Rd/Wr:
+-------------------------------------------------------------------------------
+    http://papermint-design.com/community/node/331
+    (or google search 'beaglebone cape eeprom');
+================================================================================
+
+================================================================================
+Beagle Bone Black Cape DEVICE TREE:
+-------------------------------------------------------------------------------
+Good Instructions for DT for a 3d printer cape configuring PRU & it's gpio's:
+
+    http://hipstercircuits.com/category/pru
+    **** Note: The instructions on this page display zero's as 'o' !!
+    ****       Copy & paste to get correct strings.  Eg:
+                dtc -O dtb -o BB-PRU-00A0.dtbo -b 0 -@ BB-PRU-00A0.dts
+                echo BB-PRU:00A0 > /sys/devices/bone_capemgr.*/slots
+
+-------------------------------------------------------------------------------
+Instructions to enable the PRU in device tree: (if you see: "prussdrv_open open failed")
+https://github.com/boxysean/beaglebone-DMX/issues/2
+================================================================================
+Git Repo Setup:
+    - First, create the repo on GitHub
+        - Leave 'Initialize this repolistory with a README' unchecked.
+        - Add .gitignore: None
+        - Click 'Create Repository' & follow the remaining instructions on their website.
+    - Search GitHub for 'Generating SSH Keys' & follow instructions to setup SSH pushes.
+        - Hint: You'll probably need to run this: opkg install ssh-keygen
+
+================================================================================
+
