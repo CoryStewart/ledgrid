@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Compiling the overlay from .dts to .dtbo"
+dtc -O dtb -o cory-ledgrid-00A0.dtbo -b 0 -@ cory-ledgrid-00A0.dts
+cp -f cory-ledgrid-00A0.dts  /lib/firmware
+cp -f cory-ledgrid-00A0.dtbo /lib/firmware

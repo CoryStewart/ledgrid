@@ -1,0 +1,50 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+    /* identification */
+    part-number = "cory-ledgrid";
+    version = "00A0";
+
+    /* State the resources this cape uses. Prevents other capes from using. */
+    exclusive-use = 
+        /* Header pins used: */
+        "P8.12",    /* GPIO1_12 (mode 7), pr1_pru0_pru_r30_14 (mode 6) */
+        /* SoC IP cores used: */
+        "pruss";
+
+    fragment@0 {
+        /* This fragment will target the pinmux & overlay it with new values. */
+        /* The am33x_pinmux is compatible with the pinctrl-single driver code. */
+        /* The pinctrl-single driver is documented at: https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-single.txt */
+
+        /* The 'target' needs to appear in the __symbols__ section of the main     */
+        /* DT in /boot/am33xx_boneblack.dtb.  This is the node we're attaching to. */
+        target = <&am33xx_pinmux>;
+        __overlay__ {
+            pruss_pins: pinmux_pruss_pins {
+                pinctrl-single,pins = <
+                    /* offset config_val */
+                    /*      config_val: */
+                    /*      config_val[6]:0=fast_slew,1=slow_slew */
+                    /*      config_val[5]:0=rcvr_dis,1=rcvr_en */
+                    /*      config_val[4]:0=pulldn,1=pullup */
+                    /*      config_val[3]:0=pull_en,1=pull_dis */
+                    /*      config_val[2:0]: Mux Mode */
+                    0x30 0x26   /* P8_12 : mode_6 = pr1_pru0_pru_r30_14 : NeoPixel LED strip driving output */
+                >;
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&pruss>; /* we're attaching to the 'pruss' __symbol__ node */
+        __overlay__ {
+            status = "okay"; /* enable the PRU */
+            pinctrl-names = "default";
+            pinctrl-0     = <&pruss_pins>;  /* reference the overlay child node label from fragment@0 (out pinmux setup) */
+        };
+    };
+};
