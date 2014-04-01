@@ -54,6 +54,7 @@
 void initPixelArr( unsigned int offset );
 void initPixelArr2( unsigned int offset );
 void initPixelArr3( unsigned int offset, unsigned int color );
+void initPixelArr_Mario();
 void clearPixelArr();
 
 /******************************************************************************
@@ -200,4 +201,11 @@ void clearPixelArr () {
         sharedMem_int[OFFSET_SHAREDRAM + i] = 0x00000000;   // GRB value
     }
 }
+
+// ----
+
+void initPixelArr_Mario() {
+#include "./pil/mario_data_init.inc"
+}
+
 

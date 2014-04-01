@@ -1,4 +1,8 @@
 ================================================================================
+Executing the PYPRUSS example scripts requires first running:
+    # especially if you try it and get:  "prussdrv_open open failed"
+    echo BB-BONE-PRU-01 > /sys/devices/bone_capemgr.9/slots
+================================================================================
 The WORKING BBB ledgrid has:
     /boot dir:
         cape-bone-pru-00A0-dts
@@ -422,4 +426,6 @@ Git Repo Setup:
         - Hint: You'll probably need to run this: opkg install ssh-keygen
 
 ================================================================================
+SSL Certificates setup for BBB:
+    http://derekmolloy.ie/fixing-git-and-curl-certificates-problem-on-beaglebone-blac/
 
