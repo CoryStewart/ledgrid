@@ -1,5 +1,9 @@
+### BBB:
+*.dtbo
+
 ### VI:
 *~
+*.swp
 
 ### C-code:
 

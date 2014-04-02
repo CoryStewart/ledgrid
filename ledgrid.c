@@ -54,7 +54,9 @@
 void initPixelArr( unsigned int offset );
 void initPixelArr2( unsigned int offset );
 void initPixelArr3( unsigned int offset, unsigned int color );
-void initPixelArr_Mario();
+void initPixelArr_Mario1();
+void initPixelArr_Mario2();
+void initPixelArr_Mario3();
 void clearPixelArr();
 
 /******************************************************************************
@@ -78,6 +80,11 @@ static unsigned int *sharedMem_int;
 int main (void) {
     unsigned int ret;
     unsigned int i, j, k;
+    struct timespec requested_time, elapsed_time;
+
+    requested_time.tv_sec = 0;
+    requested_time.tv_nsec = 100 * 1000000; // 100ms
+
 
     tpruss_intc_initdata pruss_intc_initdata = PRUSS_INTC_INITDATA;
     
@@ -100,16 +107,35 @@ int main (void) {
     sharedMem_int = (unsigned int*) sharedMem;
 
 
-    for( i=0 ; i < 3 ; i++ ) {
-        //for( j=0 ; j < 3 ; j++ ) {
-        for( j=1 ; j <= NUM_OF_PIXELS ; j++ ) {
-            initPixelArr3( j, i % 3 );
-            updatePixelStrip();
-            sleep( 0.001 ); // in ms
+    if( 1 == 0 ) {
+        for( i=0 ; i < 3 ; i++ ) {
+            //for( j=0 ; j < 3 ; j++ ) {
+            for( j=1 ; j <= NUM_OF_PIXELS ; j++ ) {
+                initPixelArr3( j, i % 3 );
+                updatePixelStrip();
+                nanosleep( &requested_time, &elapsed_time );
+            }
         }
+        clearPixelArr();
+        updatePixelStrip();
     }
-    clearPixelArr();
-    updatePixelStrip();
+
+    if( 1 == 1 ) {
+        for( i=0 ; i < 30 ; i++ ) {
+            initPixelArr_Mario1();
+            updatePixelStrip();
+            nanosleep( &requested_time, &elapsed_time );
+            initPixelArr_Mario2();
+            updatePixelStrip();
+            nanosleep( &requested_time, &elapsed_time );
+            initPixelArr_Mario3();
+            updatePixelStrip();
+            nanosleep( &requested_time, &elapsed_time );
+        }
+        //sleep( 2 ); // seconds
+        clearPixelArr();
+        updatePixelStrip();
+    }
     
     // cory: Confirm PRU operation by checking that it wrote a signature into the shared ram:
     if( (sharedMem_int[OFFSET_SHAREDRAM + 0] == 0xACEDACED) &&
@@ -204,8 +230,20 @@ void clearPixelArr () {
 
 // ----
 
-void initPixelArr_Mario() {
-#include "./pil/mario_data_init.inc"
+void initPixelArr_Mario1() {
+#include "./pil/mario1_data_init.inc"
+}
+
+// ----
+
+void initPixelArr_Mario2() {
+#include "./pil/mario2_data_init.inc"
+}
+
+// ----
+
+void initPixelArr_Mario3() {
+#include "./pil/mario3_data_init.inc"
 }
 
 

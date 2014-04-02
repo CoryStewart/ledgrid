@@ -205,7 +205,8 @@ cory: these work but are a bit old because they recommend changing the boot
 - Run these commands to backup the current version of the BBB Device Tree:
     cd /boot
     cp am335x-boneblack.dtb am335x-boneblack.dtb_orig
-    dtc -I dtb -O dts am335x-boneblack.dtb > am335x-boneblack.dts_orig
+    To reverse-compile the dtb to a dts:
+        dtc -I dtb -O dts am335x-boneblack.dtb > am335x-boneblack.dts_orig
     cp !$ am335x-boneblack.dts_pru
 - Edit the new am335x-boneblack.dts_pru file, changing line FROM:
     *** Note: errors in this file will brick your BBB.
