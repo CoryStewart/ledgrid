@@ -4,7 +4,7 @@
 #import os
 import sys
 import pypruss                              # The Programmable Realtime Unit Library
-import numpy as np                          # Needed for braiding the pins with the delays
+#import numpy as np                          # Needed for braiding the pins with the delays
 from time import sleep
 from PIL import Image
 
@@ -90,128 +90,128 @@ class SpriteSheet():
         return
 
 # ================================================================================
-class FroggerSheet(SpriteSheet):
-    def __init__( self ):
-        h = SpriteSheet.__init__( self, 'sprite_sheets/frogger.png', stepx=16, stepy=16, offsetx=32, offsety=32 ) 
-
-        self.defineSprite( 'explode1', 48, 112 )
-        self.defineSprite( 'explode2', 72, 112 )
-        self.defineSprite( 'explode3', 96, 112 )
-        self.defineSprite( 'skull1', 16, 112  )
-        self.defineSprite( 'skull2', 128, 112 )
-        self.defineSprite( 'skull3', 152, 112 )
-        self.defineSprite( 'skull4', 176, 112 )
-        self.defineSprite( 'snake1', 16, 272 ) # 2 wide
-        self.defineSprite( 'snake2', 16, 304 ) # 2 wide
-        self.defineSprite( 'snake3', 56, 272 ) # 2 wide
-        self.defineSprite( 'snake4', 56, 304 ) # 2 wide
-        self.defineSprite( 'snake5', 96, 272 ) # 2 wide
-        self.defineSprite( 'log', 112, 304 ) # 3 wide
-        self.defineSprite( 'racecar1', 16, 336 )
-        self.defineSprite( 'bulldozer', 40, 336 )
-        self.defineSprite( 'truck', 64, 336 ) # 2 wide
-        self.defineSprite( 'compactcar', 104, 336 )
-        self.defineSprite( 'racecar2', 128, 336 )
-        self.defineSprite( 'frogger_F', 16, 368 )
-        self.defineSprite( 'frogger_R', 40, 368 )
-        self.defineSprite( 'frogger_O', 64, 368 )
-        self.defineSprite( 'frogger_G', 88, 368 )
-        self.defineSprite( 'frogger_E', 112, 368 )
-        self.defineSprite( 'alligator_headopen', 120, 208 )
-        self.defineSprite( 'FrogStanding1', 128, 176 )
-        self.defineSprite( 'FrogStanding2', 104, 176 )
-        self.defineSprite( 'SwimmingTurtle1', 48, 144 )
-        self.defineSprite( 'SwimmingTurtle2', 72, 144 )
-        self.defineSprite( 'SwimmingTurtle3', 96, 144 )
-        self.defineSprite( 'FrogSplat1', 128, 144 )
-        self.defineSprite( 'FrogSplat2', 152, 144 )
-        self.defineSprite( '100pts', 16, 176 )
-        self.defineSprite( '200pts', 40, 176 )
-        step = 16
-        x = 188
-        x += step; self.defineSprite( 'A_yel', x, 108 )
-        x += step; self.defineSprite( 'B_yel', x, 108 )
-        x += step; self.defineSprite( 'C_yel', x, 108 )
-        x += step; self.defineSprite( 'D_yel', x, 108 )
-        x += step; self.defineSprite( 'E_yel', x, 108 )
-        x += step; self.defineSprite( 'F_yel', x, 108 )
-        x += step; self.defineSprite( 'G_yel', x, 108 )
-        x += step; self.defineSprite( 'H_yel', x, 108 )
-        x += step; self.defineSprite( 'I_yel', x, 108 )
-        x += step; self.defineSprite( 'J_yel', x, 108 )
-        x = 188
-        x += step; self.defineSprite( 'K_yel', x, 124 )
-        x += step; self.defineSprite( 'L_yel', x, 124 )
-        x += step; self.defineSprite( 'M_yel', x, 124 )
-        x += step; self.defineSprite( 'N_yel', x, 124 )
-        x += step; self.defineSprite( 'O_yel', x, 124 )
-        x += step; self.defineSprite( 'P_yel', x, 124 )
-        x += step; self.defineSprite( 'Q_yel', x, 124 )
-        x += step; self.defineSprite( 'R_yel', x, 124 )
-        x += step; self.defineSprite( 'S_yel', x, 124 )
-        x += step; self.defineSprite( 'T_yel', x, 124 )
-        x = 188
-        x += step; self.defineSprite( 'U_yel', x, 140 )
-        x += step; self.defineSprite( 'V_yel', x, 140 )
-        x += step; self.defineSprite( 'W_yel', x, 140 )
-        x += step; self.defineSprite( 'X_yel', x, 140 )
-        x += step; self.defineSprite( 'Y_yel', x, 140 )
-        x += step; self.defineSprite( 'Z_yel', x, 140 )
-        x += step; self.defineSprite( 'dash_yel', x, 140 )
-        x += step; self.defineSprite( 'space', x, 140 )
-        self.defineSprite( 'Box_yel', 348, 140 )
-        self.defineSprite( 'Copyright_yel', 332, 140 )
-
-        # Red:
-        #     0 = 204,156
-        #     1 = 220,156
-        #     ... 9 = 348,156
-        # 
-        # Blue:
-        #     0 = 204, 220
-        #     1 = 220, 220
-        #     9 = 348, 220
-        # Purple:
-        #     9 = 348, 284
-        return( h )
-
-# ================================================================================
-class MarioSheet(SpriteSheet):
-    def __init__( self ):
-        h = SpriteSheet.__init__( self, 'sprite_sheets/mario_sheet.png', stepx=16, stepy=16, offsetx=0, offsety=0 ) 
-
-        self.defineSprite( 'mario1', 0, 0 )
-        self.defineSprite( 'mario2', 16, 0 )
-        self.defineSprite( 'mario3', 32, 0 )
-        return( h )
-
-# ================================================================================
-class MinecraftSheet(SpriteSheet):
-    def __init__( self ):
-        h = SpriteSheet.__init__( self, 'sprite_sheets/MinecraftSheet_24x20.png', stepx=16, stepy=16, offsetx=0, offsety=0 ) 
-
-        self.defineSprite( 'glass', 64, 272 )
-        self.defineSprite( 'lava', 176, 288 )
-        self.defineSprite( 'tracks_redstone_on', 144, 208 )
-        self.defineSprite( 'tracks_redstone_off', 144, 224 )
-        self.defineSprite( 'yel_tracks_redstone_on', 48, 176 )
-        self.defineSprite( 'yel_tracks_redstone_off', 48, 160 )
-        self.defineSprite( 'grass1', 128, 192 )
-        self.defineSprite( 'grass2', 144, 192 )
-        self.defineSprite( 'grass3', 160, 192 )
-        self.defineSprite( 'grass4', 176, 192 )
-        self.defineSprite( 'torch_on', 48, 96 )
-        self.defineSprite( 'torch_off', 48, 112 )
-        self.defineSprite( 'ladder', 48, 80 )
-        self.defineSprite( 'wheat1', 128, 80 )
-        self.defineSprite( 'wheat2', 144, 80 )
-        self.defineSprite( 'wheat3', 160, 80 )
-        self.defineSprite( 'wheat4', 176, 80 )
-        self.defineSprite( 'wheat5', 192, 80 )
-        self.defineSprite( 'wheat6', 208, 80 )
-        self.defineSprite( 'wheat7', 224, 80 )
-        self.defineSprite( 'wheat8', 240, 80 )
-        return( h )
+#class FroggerSheet(SpriteSheet):
+#    def __init__( self ):
+#        h = SpriteSheet.__init__( self, 'sprite_sheets/frogger.png', stepx=16, stepy=16, offsetx=32, offsety=32 ) 
+#
+#        self.defineSprite( 'explode1', 48, 112 )
+#        self.defineSprite( 'explode2', 72, 112 )
+#        self.defineSprite( 'explode3', 96, 112 )
+#        self.defineSprite( 'skull1', 16, 112  )
+#        self.defineSprite( 'skull2', 128, 112 )
+#        self.defineSprite( 'skull3', 152, 112 )
+#        self.defineSprite( 'skull4', 176, 112 )
+#        self.defineSprite( 'snake1', 16, 272 ) # 2 wide
+#        self.defineSprite( 'snake2', 16, 304 ) # 2 wide
+#        self.defineSprite( 'snake3', 56, 272 ) # 2 wide
+#        self.defineSprite( 'snake4', 56, 304 ) # 2 wide
+#        self.defineSprite( 'snake5', 96, 272 ) # 2 wide
+#        self.defineSprite( 'log', 112, 304 ) # 3 wide
+#        self.defineSprite( 'racecar1', 16, 336 )
+#        self.defineSprite( 'bulldozer', 40, 336 )
+#        self.defineSprite( 'truck', 64, 336 ) # 2 wide
+#        self.defineSprite( 'compactcar', 104, 336 )
+#        self.defineSprite( 'racecar2', 128, 336 )
+#        self.defineSprite( 'frogger_F', 16, 368 )
+#        self.defineSprite( 'frogger_R', 40, 368 )
+#        self.defineSprite( 'frogger_O', 64, 368 )
+#        self.defineSprite( 'frogger_G', 88, 368 )
+#        self.defineSprite( 'frogger_E', 112, 368 )
+#        self.defineSprite( 'alligator_headopen', 120, 208 )
+#        self.defineSprite( 'FrogStanding1', 128, 176 )
+#        self.defineSprite( 'FrogStanding2', 104, 176 )
+#        self.defineSprite( 'SwimmingTurtle1', 48, 144 )
+#        self.defineSprite( 'SwimmingTurtle2', 72, 144 )
+#        self.defineSprite( 'SwimmingTurtle3', 96, 144 )
+#        self.defineSprite( 'FrogSplat1', 128, 144 )
+#        self.defineSprite( 'FrogSplat2', 152, 144 )
+#        self.defineSprite( '100pts', 16, 176 )
+#        self.defineSprite( '200pts', 40, 176 )
+#        step = 16
+#        x = 188
+#        x += step; self.defineSprite( 'A_yel', x, 108 )
+#        x += step; self.defineSprite( 'B_yel', x, 108 )
+#        x += step; self.defineSprite( 'C_yel', x, 108 )
+#        x += step; self.defineSprite( 'D_yel', x, 108 )
+#        x += step; self.defineSprite( 'E_yel', x, 108 )
+#        x += step; self.defineSprite( 'F_yel', x, 108 )
+#        x += step; self.defineSprite( 'G_yel', x, 108 )
+#        x += step; self.defineSprite( 'H_yel', x, 108 )
+#        x += step; self.defineSprite( 'I_yel', x, 108 )
+#        x += step; self.defineSprite( 'J_yel', x, 108 )
+#        x = 188
+#        x += step; self.defineSprite( 'K_yel', x, 124 )
+#        x += step; self.defineSprite( 'L_yel', x, 124 )
+#        x += step; self.defineSprite( 'M_yel', x, 124 )
+#        x += step; self.defineSprite( 'N_yel', x, 124 )
+#        x += step; self.defineSprite( 'O_yel', x, 124 )
+#        x += step; self.defineSprite( 'P_yel', x, 124 )
+#        x += step; self.defineSprite( 'Q_yel', x, 124 )
+#        x += step; self.defineSprite( 'R_yel', x, 124 )
+#        x += step; self.defineSprite( 'S_yel', x, 124 )
+#        x += step; self.defineSprite( 'T_yel', x, 124 )
+#        x = 188
+#        x += step; self.defineSprite( 'U_yel', x, 140 )
+#        x += step; self.defineSprite( 'V_yel', x, 140 )
+#        x += step; self.defineSprite( 'W_yel', x, 140 )
+#        x += step; self.defineSprite( 'X_yel', x, 140 )
+#        x += step; self.defineSprite( 'Y_yel', x, 140 )
+#        x += step; self.defineSprite( 'Z_yel', x, 140 )
+#        x += step; self.defineSprite( 'dash_yel', x, 140 )
+#        x += step; self.defineSprite( 'space', x, 140 )
+#        self.defineSprite( 'Box_yel', 348, 140 )
+#        self.defineSprite( 'Copyright_yel', 332, 140 )
+#
+#        # Red:
+#        #     0 = 204,156
+#        #     1 = 220,156
+#        #     ... 9 = 348,156
+#        # 
+#        # Blue:
+#        #     0 = 204, 220
+#        #     1 = 220, 220
+#        #     9 = 348, 220
+#        # Purple:
+#        #     9 = 348, 284
+#        return( h )
+#
+## ================================================================================
+#class MarioSheet(SpriteSheet):
+#    def __init__( self ):
+#        h = SpriteSheet.__init__( self, 'sprite_sheets/mario_sheet.png', stepx=16, stepy=16, offsetx=0, offsety=0 ) 
+#
+#        self.defineSprite( 'mario1', 0, 0 )
+#        self.defineSprite( 'mario2', 16, 0 )
+#        self.defineSprite( 'mario3', 32, 0 )
+#        return( h )
+#
+## ================================================================================
+#class MinecraftSheet(SpriteSheet):
+#    def __init__( self ):
+#        h = SpriteSheet.__init__( self, 'sprite_sheets/MinecraftSheet_24x20.png', stepx=16, stepy=16, offsetx=0, offsety=0 ) 
+#
+#        self.defineSprite( 'glass', 64, 272 )
+#        self.defineSprite( 'lava', 176, 288 )
+#        self.defineSprite( 'tracks_redstone_on', 144, 208 )
+#        self.defineSprite( 'tracks_redstone_off', 144, 224 )
+#        self.defineSprite( 'yel_tracks_redstone_on', 48, 176 )
+#        self.defineSprite( 'yel_tracks_redstone_off', 48, 160 )
+#        self.defineSprite( 'grass1', 128, 192 )
+#        self.defineSprite( 'grass2', 144, 192 )
+#        self.defineSprite( 'grass3', 160, 192 )
+#        self.defineSprite( 'grass4', 176, 192 )
+#        self.defineSprite( 'torch_on', 48, 96 )
+#        self.defineSprite( 'torch_off', 48, 112 )
+#        self.defineSprite( 'ladder', 48, 80 )
+#        self.defineSprite( 'wheat1', 128, 80 )
+#        self.defineSprite( 'wheat2', 144, 80 )
+#        self.defineSprite( 'wheat3', 160, 80 )
+#        self.defineSprite( 'wheat4', 176, 80 )
+#        self.defineSprite( 'wheat5', 192, 80 )
+#        self.defineSprite( 'wheat6', 208, 80 )
+#        self.defineSprite( 'wheat7', 224, 80 )
+#        self.defineSprite( 'wheat8', 240, 80 )
+#        return( h )
 
 # ================================================================================
 class Ledgrid():
@@ -397,15 +397,18 @@ class Ledgrid():
 
 # ================================================================================
 if __name__ == '__main__':
-    frogger = FroggerSheet( )
-    mario = MarioSheet( )
-    minecraft = MinecraftSheet();
+    import MrsPacmanSheet, MinecraftSheet, MarioSheet, FroggerSheet
+
+    frogger_ss = FroggerSheet.FroggerSheet( )
+    mario_ss = MarioSheet.MarioSheet( )
+    minecraft_ss = MinecraftSheet.MinecraftSheet();
+    mrspacman_ss = MrsPacmanSheet.MrsPacmanSheet();
 
     # Use the SpriteSheet.exploresheet() method to display the sprites & determine their coords:
     if False:
-        mrspacman = SpriteSheet( 'sprite_sheets/mrs_pacman_16x16.png', stepx=16, stepy=16, offsetx=0, offsety=0 )
+        ss = SpriteSheet( 'sprite_sheets/mrs_pacman_16x16.png', stepx=16, stepy=16, offsetx=0, offsety=0 )
         grid = Ledgrid()
-        grid.exploreSheet( mrspacman )
+        grid.exploreSheet( ss )
         grid.clear()
         grid.close()
         sys.exit(0)
@@ -413,100 +416,168 @@ if __name__ == '__main__':
     # Use the AnimationSequence.addFrame() method to define a sequences of images for an animation:
     if True:        
         seq3 = AnimationSequence("seq3")
-        seq3.addFrame( mario, 'mario1', duration_ms=1000 )
+        seq3.addFrame( mario_ss, 'mario1', duration_ms=1000 )
 
         seq1 = AnimationSequence("seq1")
 
-        seq1.addFrame( minecraft, 'wheat1', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat2', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat3', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat4', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat5', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat6', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat7', duration_ms=100 )
-        seq1.addFrame( minecraft, 'wheat8', duration_ms=100 )
-        seq1.addFrame( minecraft, 'glass', duration_ms=150 )
-        seq1.addFrame( minecraft, 'lava', duration_ms=150 )
-        seq1.addFrame( minecraft, 'tracks_redstone_on', duration_ms=250 )
-        seq1.addFrame( minecraft, 'tracks_redstone_off', duration_ms=250 )
-        seq1.addFrame( minecraft, 'yel_tracks_redstone_on', duration_ms=250 )
-        seq1.addFrame( minecraft, 'yel_tracks_redstone_off', duration_ms=250 )
-        seq1.addFrame( minecraft, 'grass1', duration_ms=150 )
-        seq1.addFrame( minecraft, 'grass2', duration_ms=150 )
-        seq1.addFrame( minecraft, 'grass3', duration_ms=150 )
-        seq1.addFrame( minecraft, 'grass4', duration_ms=150 )
-        seq1.addFrame( minecraft, 'torch_on', duration_ms=250 )
-        seq1.addFrame( minecraft, 'torch_off', duration_ms=250 )
-        seq1.addFrame( minecraft, 'ladder', duration_ms=350 )
+        seq1.addFrame( minecraft_ss, 'wheat1', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat2', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat3', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat4', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat5', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat6', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat7', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'wheat8', duration_ms=100 )
+        seq1.addFrame( minecraft_ss, 'glass', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'lava', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'tracks_redstone_off', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_on', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_off', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'grass1', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'grass2', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'grass3', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'grass4', duration_ms=150 )
+        seq1.addFrame( minecraft_ss, 'torch_on', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'torch_off', duration_ms=250 )
+        seq1.addFrame( minecraft_ss, 'ladder', duration_ms=350 )
 
-        seq1.addFrame( frogger, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger, 'skull1', duration_ms=150 )
-        seq1.addFrame( frogger, 'skull2', duration_ms=150 )
-        seq1.addFrame( frogger, 'skull3', duration_ms=150 )
-        seq1.addFrame( frogger, 'skull4', duration_ms=150 )
-        seq1.addFrame( frogger, 'racecar1', duration_ms=150 )
-        seq1.addFrame( frogger, 'racecar2', duration_ms=150 )
-        seq1.addFrame( frogger, 'alligator_headopen', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogSplat1', duration_ms=150 )
-        seq1.addFrame( frogger, 'FrogSplat2', duration_ms=150 )
-        seq1.addFrame( frogger, '100pts', duration_ms=150 )
-        seq1.addFrame( frogger, '200pts', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'skull1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'skull2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'skull3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'skull4', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'racecar1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'racecar2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'alligator_headopen', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogSplat1', duration_ms=150 )
+        seq1.addFrame( frogger_ss, 'FrogSplat2', duration_ms=150 )
+        seq1.addFrame( frogger_ss, '100pts', duration_ms=150 )
+        seq1.addFrame( frogger_ss, '200pts', duration_ms=150 )
 
         seq2 = AnimationSequence("seq2")
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
 
-    grid = Ledgrid()
-    grid.showSequence( seq3, printinfo=False )
-    grid.showSequence( seq2, printinfo=False )
-    grid.showSequence( seq1, printinfo=False )
-    grid.clear()
-    grid.close()
-    sys.exit(0)
+        seq4a = AnimationSequence("seq4a")
+        dur = 200
+        seq4a.addFrame( mrspacman_ss, 'pacman_right_open1', duration_ms=dur )
+        seq4a.addFrame( mrspacman_ss, 'pacman_right_open2', duration_ms=dur )
+        seq4a.addFrame( mrspacman_ss, 'pacman_right_closed', duration_ms=dur )
+
+        seq4b = AnimationSequence("seq4b")
+        dur = 250
+        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable1', duration_ms=dur )
+        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable2', duration_ms=dur )
+        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable3', duration_ms=dur )
+        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable4', duration_ms=dur )
+
+        seq4c = AnimationSequence("seq4c")
+        dur = 150
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_up1', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_up2', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_down1', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_down2', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_left1', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_left2', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_right1', duration_ms=dur )
+        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_right2', duration_ms=dur )
+
+        seq4d = AnimationSequence("seq4d")
+        dur = 350
+        seq4d.addFrame( mrspacman_ss, 'cherry',        duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'strawberry',    duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'orange',        duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'pretzel',       duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'apple',         duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'pear',          duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, 'bannana',       duration_ms=dur )
+        seq4d.addFrame( mrspacman_ss, '500pts',        duration_ms=dur )
+
+
+        seq4e = AnimationSequence("seq4e")
+        dur = 250
+        seq4e.addFrame( mrspacman_ss, '200pts',                      duration_ms=dur )
+        seq4e.addFrame( mrspacman_ss, '400pts',                      duration_ms=dur )
+        seq4e.addFrame( mrspacman_ss, '800pts',                      duration_ms=dur )
+        seq4e.addFrame( mrspacman_ss, '1600pts',                     duration_ms=dur )
+
+        seq4f = AnimationSequence("seq4f")
+        dur = 150
+        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_up',     duration_ms=dur )
+        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_down',   duration_ms=dur )
+        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_left',   duration_ms=dur )
+        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_right',  duration_ms=dur )
+
+        # ----
+
+        grid = Ledgrid()
+
+        for i in range( 10 ):
+            #grid.showSequence( seq3, printinfo=False )
+            grid.showSequence( seq2, printinfo=False )
+            grid.showSequence( seq1, printinfo=False )
+
+            for i in range(4):
+                grid.showSequence( seq4a, printinfo=False )
+            for i in range(2):
+                grid.showSequence( seq4b, printinfo=False )
+            for i in range(1):
+                grid.showSequence( seq4c, printinfo=False )
+            for i in range(1):
+                grid.showSequence( seq4d, printinfo=False )
+            for i in range(1):
+                grid.showSequence( seq4e, printinfo=False )
+            for i in range(3):
+                grid.showSequence( seq4f, printinfo=False )
+
+        grid.clear()
+        grid.close()
+        sys.exit(0)

@@ -1,4 +1,23 @@
 ================================================================================
+Executing python script on bootup:
+    1) Create a new file in /lib/systemd/system/ledgrid.service :
+        [Unit]
+        Description=Start Ledgrid Demo
+
+        [Service]
+        WorkingDirectory=/home/root/ledgrid
+        ExecStart=Ledgrid.py
+        KillMode=process
+
+        [Install]
+        WantedBy=multi-user.target
+    2) Install the service:
+        systemctl enable ledgrid.service
+    3) To start the service, reboot or execute:
+        systemctl start ledgrid.service
+    4) To check if the service is running and get the latest outputs from the script:
+        systemctl status ledgrid.service
+================================================================================
 Executing the PYPRUSS example scripts requires first running:
     # especially if you try it and get:  "prussdrv_open open failed"
     echo BB-BONE-PRU-01 > /sys/devices/bone_capemgr.9/slots
