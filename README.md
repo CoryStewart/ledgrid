@@ -20,7 +20,4 @@ This project consists of:
 - To Be Added Soon:  
     - Python PYPRUSS lib use to eliminate the c-code and integrate all PIL code with PYPRUSS code.
     - Code to control the ledgrid hardware with an iPhone app.
-- It also has some other stuff included that I found useful for the BBB that I wanted revision 
-  controlled but, really, is just included because it's useful for tinkering with the BBB.  Eg:
-  Adafruit BBIO python library.
 

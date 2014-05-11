@@ -1,3 +1,17 @@
+# Sprite files I don't want in the repo (possible copyright and/or owner permission requirements):
+MinecraftSheet_24x20.png
+frogger.png
+mrs_pacman.gif
+mrs_pacman_16x16.png
+pacman_spritesheet.png
+
+### BBB PRU and C-code and eeprom derived objects (compiled binaries):
+*.bin
+c-code/ledgrid
+data.eeprom
+misc/cape_eeprom_creator/c-version/mkeeprom
+eeprom.bin
+
 ### BBB:
 *.dtbo
 
