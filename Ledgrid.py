@@ -101,7 +101,22 @@ class FroggerSheet(SpriteSheet):
         self.defineSprite( 'skull2', 128, 112 )
         self.defineSprite( 'skull3', 152, 112 )
         self.defineSprite( 'skull4', 176, 112 )
-        self.defineSprite( 'racecar', 128, 336 )
+        self.defineSprite( 'snake1', 16, 272 ) # 2 wide
+        self.defineSprite( 'snake2', 16, 304 ) # 2 wide
+        self.defineSprite( 'snake3', 56, 272 ) # 2 wide
+        self.defineSprite( 'snake4', 56, 304 ) # 2 wide
+        self.defineSprite( 'snake5', 96, 272 ) # 2 wide
+        self.defineSprite( 'log', 112, 304 ) # 3 wide
+        self.defineSprite( 'racecar1', 16, 336 )
+        self.defineSprite( 'bulldozer', 40, 336 )
+        self.defineSprite( 'truck', 64, 336 ) # 2 wide
+        self.defineSprite( 'compactcar', 104, 336 )
+        self.defineSprite( 'racecar2', 128, 336 )
+        self.defineSprite( 'frogger_F', 16, 368 )
+        self.defineSprite( 'frogger_R', 40, 368 )
+        self.defineSprite( 'frogger_O', 64, 368 )
+        self.defineSprite( 'frogger_G', 88, 368 )
+        self.defineSprite( 'frogger_E', 112, 368 )
         self.defineSprite( 'alligator_headopen', 120, 208 )
         self.defineSprite( 'FrogStanding1', 128, 176 )
         self.defineSprite( 'FrogStanding2', 104, 176 )
@@ -168,6 +183,34 @@ class MarioSheet(SpriteSheet):
         self.defineSprite( 'mario1', 0, 0 )
         self.defineSprite( 'mario2', 16, 0 )
         self.defineSprite( 'mario3', 32, 0 )
+        return( h )
+
+# ================================================================================
+class MinecraftSheet(SpriteSheet):
+    def __init__( self ):
+        h = SpriteSheet.__init__( self, 'sprite_sheets/MinecraftSheet_24x20.png', stepx=16, stepy=16, offsetx=0, offsety=0 ) 
+
+        self.defineSprite( 'glass', 64, 272 )
+        self.defineSprite( 'lava', 176, 288 )
+        self.defineSprite( 'tracks_redstone_on', 144, 208 )
+        self.defineSprite( 'tracks_redstone_off', 144, 224 )
+        self.defineSprite( 'yel_tracks_redstone_on', 48, 176 )
+        self.defineSprite( 'yel_tracks_redstone_off', 48, 160 )
+        self.defineSprite( 'grass1', 128, 192 )
+        self.defineSprite( 'grass2', 144, 192 )
+        self.defineSprite( 'grass3', 160, 192 )
+        self.defineSprite( 'grass4', 176, 192 )
+        self.defineSprite( 'torch_on', 48, 96 )
+        self.defineSprite( 'torch_off', 48, 112 )
+        self.defineSprite( 'ladder', 48, 80 )
+        self.defineSprite( 'wheat1', 128, 80 )
+        self.defineSprite( 'wheat2', 144, 80 )
+        self.defineSprite( 'wheat3', 160, 80 )
+        self.defineSprite( 'wheat4', 176, 80 )
+        self.defineSprite( 'wheat5', 192, 80 )
+        self.defineSprite( 'wheat6', 208, 80 )
+        self.defineSprite( 'wheat7', 224, 80 )
+        self.defineSprite( 'wheat8', 240, 80 )
         return( h )
 
 # ================================================================================
@@ -356,7 +399,9 @@ class Ledgrid():
 if __name__ == '__main__':
     frogger = FroggerSheet( )
     mario = MarioSheet( )
+    minecraft = MinecraftSheet();
 
+    # Use the SpriteSheet.exploresheet() method to display the sprites & determine their coords:
     if False:
         mrspacman = SpriteSheet( 'sprite_sheets/mrs_pacman_16x16.png', stepx=16, stepy=16, offsetx=0, offsety=0 )
         grid = Ledgrid()
@@ -365,11 +410,35 @@ if __name__ == '__main__':
         grid.close()
         sys.exit(0)
         
+    # Use the AnimationSequence.addFrame() method to define a sequences of images for an animation:
     if True:        
         seq3 = AnimationSequence("seq3")
         seq3.addFrame( mario, 'mario1', duration_ms=1000 )
 
         seq1 = AnimationSequence("seq1")
+
+        seq1.addFrame( minecraft, 'wheat1', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat2', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat3', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat4', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat5', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat6', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat7', duration_ms=100 )
+        seq1.addFrame( minecraft, 'wheat8', duration_ms=100 )
+        seq1.addFrame( minecraft, 'glass', duration_ms=150 )
+        seq1.addFrame( minecraft, 'lava', duration_ms=150 )
+        seq1.addFrame( minecraft, 'tracks_redstone_on', duration_ms=250 )
+        seq1.addFrame( minecraft, 'tracks_redstone_off', duration_ms=250 )
+        seq1.addFrame( minecraft, 'yel_tracks_redstone_on', duration_ms=250 )
+        seq1.addFrame( minecraft, 'yel_tracks_redstone_off', duration_ms=250 )
+        seq1.addFrame( minecraft, 'grass1', duration_ms=150 )
+        seq1.addFrame( minecraft, 'grass2', duration_ms=150 )
+        seq1.addFrame( minecraft, 'grass3', duration_ms=150 )
+        seq1.addFrame( minecraft, 'grass4', duration_ms=150 )
+        seq1.addFrame( minecraft, 'torch_on', duration_ms=250 )
+        seq1.addFrame( minecraft, 'torch_off', duration_ms=250 )
+        seq1.addFrame( minecraft, 'ladder', duration_ms=350 )
+
         seq1.addFrame( frogger, 'explode1', duration_ms=150 )
         seq1.addFrame( frogger, 'explode2', duration_ms=150 )
         seq1.addFrame( frogger, 'explode3', duration_ms=150 )
@@ -383,7 +452,8 @@ if __name__ == '__main__':
         seq1.addFrame( frogger, 'skull2', duration_ms=150 )
         seq1.addFrame( frogger, 'skull3', duration_ms=150 )
         seq1.addFrame( frogger, 'skull4', duration_ms=150 )
-        seq1.addFrame( frogger, 'racecar', duration_ms=150 )
+        seq1.addFrame( frogger, 'racecar1', duration_ms=150 )
+        seq1.addFrame( frogger, 'racecar2', duration_ms=150 )
         seq1.addFrame( frogger, 'alligator_headopen', duration_ms=150 )
         seq1.addFrame( frogger, 'FrogStanding1', duration_ms=150 )
         seq1.addFrame( frogger, 'FrogStanding2', duration_ms=150 )
