@@ -11,7 +11,7 @@ from PIL import Image
 # scaling to conserve power & correct color
 RedBrightnessPct = 0.50
 GrnBrightnessPct = 0.35
-BluBrightnessPct = 0.90
+BluBrightnessPct = 0.75
 
 # ================================================================================
 
@@ -71,16 +71,16 @@ if __name__ == '__main__':
     pypruss.init()                              # Init the PRU
     pypruss.open(0)                             # Open PRU event 0 which is PRU0_ARM_INTERRUPT
     pypruss.pruintc_init()                      # Init the interrupt controller
-    for i in xrange( 2 ):
+    for i in xrange( 20 ):
         for imgfile in files:
             data = convert_png( imgfile )
             pypruss.pru_write_memory(0, 0, data)    # Load the data in the PRU ram
             pypruss.exec_program(0, "./ledgriddrvr.bin")    # Load firmware on PRU 0
             pypruss.wait_for_event(0)               # Wait for event 0 which is connected to PRU0_ARM_INTERRUPT
             pypruss.clear_event(0)                  # Clear the event
-            sleep( 0.100 )                          # sleep 100ms
+            sleep( 0.040 )                          # sleep 100ms
 
-    sleep( 5.000 )                              # sleep 1s
+    #sleep( 5.000 )                              # sleep 1s
     if( clear_leds_at_end ):
         empty_data = [256] + [0]*256            # 1st index is #_of_pixels, then 256 pixel values of 0 follow it
         pypruss.pru_write_memory(0, 0, empty_data)      # Load the data in the PRU ram

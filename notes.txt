@@ -65,9 +65,9 @@ Backing Up the entire BBB (eMMC):
         NOTE:   A forum poster indicated the eMMC is installed at /dev/mmcblk0 if you boot from eMMC, but at
                 /dev/mmcblk1 if you booted from sdcard.  CHECK.
         To linbox:
-            dd if=/dev/mmcblk1 bs=1M | ssh cstewart@corymbp.local 'dd of=/home/cstewart/Desktop/BBB_backup20140330.img bs=1M'
+            dd if=/dev/mmcblk1 bs=1M | ssh cstewart@corymbp.local 'dd of=/home/cstewart/Desktop/BBB_backup20140507.img bs=1M'
         -or- To CoryMBP:
-            dd if=/dev/mmcblk0 bs=1M | ssh cstewart@linbox.local 'dd of=/Users/cstewart/Desktop/BBB_backup20140330.img bs=1m'
+            dd if=/dev/mmcblk0 bs=1M | ssh cstewart@linbox.local 'dd of=/Users/cstewart/Desktop/BBB_backup20140507.img bs=1m'
 Restoring the backup to a BBB (eMMC):
     - Boot the BBB from an sdCard bootable image & ssh to it.
     - From the BBB:
