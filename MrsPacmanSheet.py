@@ -72,6 +72,9 @@ class MrsPacmanSheet(SpriteSheet):
         self.defineSprite( 'bannana',                            96,  96 )
         self.defineSprite( '500pts',                            112,  96 )
 
+# cory: There's a bug in my SpriteSheet class definition where '200pts' from the frogger sheet is sharing the same
+#       namespace as this one from the mrs_pacman SpriteSheet.  It should be separate namespaces so need to figure this
+#       out.  But temporarily commenting this one out.
 #        self.defineSprite( '200pts',                              0, 112 )
         self.defineSprite( '400pts',                             16, 112 )
         self.defineSprite( '800pts',                             32, 112 )

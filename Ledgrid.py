@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 ''' Ledgrid.py - Module for sending SpriteSheet images and animations to the Ledgrid Hardware.'''
 
-#import os
 import sys
 import pypruss                              # The Programmable Realtime Unit Library
-#import numpy as np                          # Needed for braiding the pins with the delays
 from time import sleep
 from PIL import Image
 
@@ -73,7 +71,9 @@ class SpriteSheet():
 
     # ----
     def defineSprite( self, sprite_name, x1, y1, sizex=16, sizey=16 ):
-        if( self.sprites.has_key(sprite_name) == 0 ):
+        if( sprite_name == '' ):
+            pass    # do nothing when called with empty sprite_name
+        elif( self.sprites.has_key(sprite_name) == 0 ):
             s = Sprite( sprite_name, x1, y1, sizex, sizey )
             self.sprites[sprite_name] = s
         else:
@@ -120,8 +120,8 @@ class Ledgrid():
         pypruss.pru_write_memory(0, 0, data)    # Load the data in the PRU ram
         pypruss.exec_program(0, self.prucode_file )    # Load firmware on PRU 0
         pypruss.wait_for_event(0)               # Wait for event 0 which is connected to PRU0_ARM_INTERRUPT
+        sleep( 0.003 )                          # Allow pru to complete
         pypruss.clear_event(0)                  # Clear the event
-        #sleep( 0.500 )                          # sleep 1s
 
     # ----
     def clear( self ):
@@ -201,6 +201,25 @@ class Ledgrid():
             data = self._get_img_array( ni )
             self._sendPixels( data )
             sleep( 0.001 * duration_ms  )
+    # ----
+    def showWideImage( self, im, duration_ms, printinfo=False ):
+        if printinfo:
+            print "showWideImage():"
+        sizex, sizey = im.size
+        if printinfo:
+            print "Image size: %d, %d" % (sizex, sizey)
+        for xoffset in range( sizex-16 ):
+            crop_box = (xoffset, 0, xoffset+16, 16)
+            region = im.crop( crop_box )
+            ni = Image.new( 'RGB', (16, 16) )
+            ni.paste( region, (0, 0, 16, 16) )
+            data = self._get_img_array( ni )
+            self._sendPixels( data )
+            if xoffset < sizex-16-1:
+                #sleep( 0.000 * duration_ms )
+                pass
+            else:
+                sleep( 0.010 ) # allow longer delay on last _sendPixels (linux seems to kill pru process & leave half drawn screen on the ledgrid otherwise)
 
     # ----
     def exploreSheet( self, ss ):
@@ -274,7 +293,9 @@ class Ledgrid():
 # ================================================================================
 if __name__ == '__main__':
     import MrsPacmanSheet, MinecraftSheet, MarioSheet, FroggerSheet
+    import TextBuilder
 
+    textbuilder_h = TextBuilder.TextBuilder();
     frogger_ss = FroggerSheet.FroggerSheet( )
     mario_ss = MarioSheet.MarioSheet( )
     minecraft_ss = MinecraftSheet.MinecraftSheet();
@@ -291,168 +312,211 @@ if __name__ == '__main__':
         
     # Use the AnimationSequence.addFrame() method to define a sequences of images for an animation:
     if True:        
-        seq3 = AnimationSequence("seq3")
-        seq3.addFrame( mario_ss, 'mario1', duration_ms=1000 )
+        mario_seq1 = AnimationSequence("mario_seq1")
+        mario_seq1.addFrame( mario_ss, 'mario1', duration_ms=1000 )
 
-        seq1 = AnimationSequence("seq1")
+        minecraft_seq1 = AnimationSequence("minecraft_seq1")
 
-        seq1.addFrame( minecraft_ss, 'wheat1', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat2', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat3', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat4', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat5', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat6', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat7', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'wheat8', duration_ms=100 )
-        seq1.addFrame( minecraft_ss, 'glass', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'lava', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'tracks_redstone_off', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_on', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_off', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'grass1', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'grass2', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'grass3', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'grass4', duration_ms=150 )
-        seq1.addFrame( minecraft_ss, 'torch_on', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'torch_off', duration_ms=250 )
-        seq1.addFrame( minecraft_ss, 'ladder', duration_ms=350 )
+        dur = 75
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat1', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat2', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat3', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat4', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat5', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat6', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat7', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'wheat8', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'glass', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'lava', duration_ms=450 )
+        minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_off', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_off', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_on', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_off', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_on', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'yel_tracks_redstone_off', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'grass1', duration_ms=150 )
+        minecraft_seq1.addFrame( minecraft_ss, 'grass2', duration_ms=150 )
+        minecraft_seq1.addFrame( minecraft_ss, 'grass3', duration_ms=150 )
+        minecraft_seq1.addFrame( minecraft_ss, 'grass4', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_unlit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_unlit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_unlit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_unlit', duration_ms=100 )
+        minecraft_seq1.addFrame( minecraft_ss, 'ladder', duration_ms=550 )
 
-        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'explode3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'skull1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'skull2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'skull3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'skull4', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'racecar1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'racecar2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'alligator_headopen', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogSplat1', duration_ms=150 )
-        seq1.addFrame( frogger_ss, 'FrogSplat2', duration_ms=150 )
-        seq1.addFrame( frogger_ss, '100pts', duration_ms=150 )
-        seq1.addFrame( frogger_ss, '200pts', duration_ms=150 )
+        frogger_seq1 = AnimationSequence("frogger_seq1")
 
-        seq2 = AnimationSequence("seq2")
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
-        seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_green_up1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_green_up2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_green_up3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_blue_up1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_blue_up2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_blue_up3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_yellow_up1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_yellow_up2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'frog_yellow_up3', duration_ms=150 )
 
-        seq4a = AnimationSequence("seq4a")
-        dur = 200
-        seq4a.addFrame( mrspacman_ss, 'pacman_right_open1', duration_ms=dur )
-        seq4a.addFrame( mrspacman_ss, 'pacman_right_open2', duration_ms=dur )
-        seq4a.addFrame( mrspacman_ss, 'pacman_right_closed', duration_ms=dur )
+        frogger_seq1.addFrame( frogger_ss, 'skull1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'explode2', duration_ms=125 )
+        frogger_seq1.addFrame( frogger_ss, 'explode3', duration_ms=100 )
+        frogger_seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'explode2', duration_ms=125 )
+        frogger_seq1.addFrame( frogger_ss, 'explode3', duration_ms=100 )
+        frogger_seq1.addFrame( frogger_ss, 'explode1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'explode2', duration_ms=125 )
+        frogger_seq1.addFrame( frogger_ss, 'explode3', duration_ms=100 )
+        frogger_seq1.addFrame( frogger_ss, 'skull1', duration_ms=150 )
+        #frogger_seq1.addFrame( frogger_ss, 'skull2', duration_ms=150 )
+        #frogger_seq1.addFrame( frogger_ss, 'skull3', duration_ms=150 )
+        #frogger_seq1.addFrame( frogger_ss, 'skull4', duration_ms=350 )
+        frogger_seq1.addFrame( frogger_ss, 'racecar1', duration_ms=250 )
+        frogger_seq1.addFrame( frogger_ss, 'racecar2', duration_ms=250 )
+        frogger_seq1.addFrame( frogger_ss, 'alligator_orange_headopen1', duration_ms=650 )
+        frogger_seq1.addFrame( frogger_ss, 'alligator_orange_headopen2', duration_ms=250 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'FrogStanding2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'Turtle_Sinking1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'Turtle_Sinking2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'Turtle_Sinking3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'Turtle_Sinking2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'Turtle_Sinking1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle1', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle2', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, 'SwimmingTurtle3', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, '100pts', duration_ms=150 )
+        frogger_seq1.addFrame( frogger_ss, '200pts', duration_ms=150 )
 
-        seq4b = AnimationSequence("seq4b")
+        mario_seq2 = AnimationSequence("mario_seq2")
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario1', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario3', duration_ms=60 )
+        mario_seq2.addFrame( mario_ss, 'mario2', duration_ms=60 )
+
+        mrspacman_seq1a = AnimationSequence("mrspacman_seq1a")
+        dur = 40
+        mrspacman_seq1a.addFrame( mrspacman_ss, 'pacman_right_open1', duration_ms=dur )
+        mrspacman_seq1a.addFrame( mrspacman_ss, 'pacman_right_open2', duration_ms=dur )
+        mrspacman_seq1a.addFrame( mrspacman_ss, 'pacman_right_closed', duration_ms=dur )
+
+        mrspacman_seq1b = AnimationSequence("mrspacman_seq1b")
         dur = 250
-        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable1', duration_ms=dur )
-        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable2', duration_ms=dur )
-        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable3', duration_ms=dur )
-        seq4b.addFrame( mrspacman_ss, 'ghost_vulnerable4', duration_ms=dur )
+        mrspacman_seq1b.addFrame( mrspacman_ss, 'ghost_vulnerable1', duration_ms=dur )
+        mrspacman_seq1b.addFrame( mrspacman_ss, 'ghost_vulnerable2', duration_ms=dur )
+        mrspacman_seq1b.addFrame( mrspacman_ss, 'ghost_vulnerable3', duration_ms=dur )
+        mrspacman_seq1b.addFrame( mrspacman_ss, 'ghost_vulnerable4', duration_ms=dur )
 
-        seq4c = AnimationSequence("seq4c")
+        mrspacman_seq1c = AnimationSequence("mrspacman_seq1c")
         dur = 150
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_up1', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_up2', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_down1', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_down2', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_left1', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_left2', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_right1', duration_ms=dur )
-        seq4c.addFrame( mrspacman_ss, 'ghost_red_eyes_right2', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_up1', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_up2', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_down1', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_down2', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_left1', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_left2', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_right1', duration_ms=dur )
+        mrspacman_seq1c.addFrame( mrspacman_ss, 'ghost_red_eyes_right2', duration_ms=dur )
 
-        seq4d = AnimationSequence("seq4d")
+        mrspacman_seq1f = AnimationSequence("mrspacman_seq1f")
+        dur = 50
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_up',     duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_right',  duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_down',   duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_left',   duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_up',     duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_right',  duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_down',   duration_ms=dur )
+        mrspacman_seq1f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_left',   duration_ms=dur )
+
+        mrspacman_seq1d = AnimationSequence("mrspacman_seq1d")
         dur = 350
-        seq4d.addFrame( mrspacman_ss, 'cherry',        duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'strawberry',    duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'orange',        duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'pretzel',       duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'apple',         duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'pear',          duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, 'bannana',       duration_ms=dur )
-        seq4d.addFrame( mrspacman_ss, '500pts',        duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'cherry',        duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'strawberry',    duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'orange',        duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'pretzel',       duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'apple',         duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'pear',          duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, 'bannana',       duration_ms=dur )
+        mrspacman_seq1d.addFrame( mrspacman_ss, '500pts',        duration_ms=dur )
 
 
-        seq4e = AnimationSequence("seq4e")
+        mrspacman_seq1e = AnimationSequence("mrspacman_seq1e")
         dur = 250
-        seq4e.addFrame( mrspacman_ss, '200pts',                      duration_ms=dur )
-        seq4e.addFrame( mrspacman_ss, '400pts',                      duration_ms=dur )
-        seq4e.addFrame( mrspacman_ss, '800pts',                      duration_ms=dur )
-        seq4e.addFrame( mrspacman_ss, '1600pts',                     duration_ms=dur )
-
-        seq4f = AnimationSequence("seq4f")
-        dur = 150
-        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_up',     duration_ms=dur )
-        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_down',   duration_ms=dur )
-        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_left',   duration_ms=dur )
-        seq4f.addFrame( mrspacman_ss, 'ghost_invisible_eyes_right',  duration_ms=dur )
+        mrspacman_seq1e.addFrame( mrspacman_ss, '200pts',                      duration_ms=dur )
+        mrspacman_seq1e.addFrame( mrspacman_ss, '400pts',                      duration_ms=dur )
+        mrspacman_seq1e.addFrame( mrspacman_ss, '800pts',                      duration_ms=dur )
+        mrspacman_seq1e.addFrame( mrspacman_ss, '1600pts',                     duration_ms=dur )
 
         # ----
 
         grid = Ledgrid()
 
-        for i in range( 10 ):
-            #grid.showSequence( seq3, printinfo=False )
-            grid.showSequence( seq2, printinfo=False )
-            grid.showSequence( seq1, printinfo=False )
+        for i in range( 5 ):
+            #grid.showSequence( mario_seq1, printinfo=False )
+            grid.showSequence( mario_seq2, printinfo=False )
+            grid.showSequence( minecraft_seq1, printinfo=False )
+
+            string_image = textbuilder_h.createFroggerStringImage( "  F R O G G E R", False );
+            grid.showWideImage( string_image, duration_ms=0 );
+            grid.showSequence( frogger_seq1, printinfo=False )
 
             for i in range(4):
-                grid.showSequence( seq4a, printinfo=False )
+                grid.showSequence( mrspacman_seq1a, printinfo=False )
             for i in range(2):
-                grid.showSequence( seq4b, printinfo=False )
+                grid.showSequence( mrspacman_seq1b, printinfo=False )
             for i in range(1):
-                grid.showSequence( seq4c, printinfo=False )
+                grid.showSequence( mrspacman_seq1c, printinfo=False )
+            for i in range(2):
+                grid.showSequence( mrspacman_seq1f, printinfo=False )
             for i in range(1):
-                grid.showSequence( seq4d, printinfo=False )
+                grid.showSequence( mrspacman_seq1d, printinfo=False )
             for i in range(1):
-                grid.showSequence( seq4e, printinfo=False )
-            for i in range(3):
-                grid.showSequence( seq4f, printinfo=False )
+                grid.showSequence( mrspacman_seq1e, printinfo=False )
 
         grid.clear()
         grid.close()
