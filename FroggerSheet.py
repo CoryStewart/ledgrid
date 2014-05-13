@@ -89,6 +89,7 @@ class FroggerSheet(SpriteSheet):
         self.defineSprite( 'frogger_O', 64, 368 )
         self.defineSprite( 'frogger_G', 88, 368 )
         self.defineSprite( 'frogger_E', 112, 368 )
+        self.defineSprite( 'frogger_ ', 136, 368 ) # space
         self.defineSprite( 'FrogSplat1', 128, 144 )
         self.defineSprite( 'FrogSplat2', 152, 144 )
         step = 16

@@ -209,17 +209,17 @@ class Ledgrid():
         if printinfo:
             print "Image size: %d, %d" % (sizex, sizey)
         for xoffset in range( sizex-16 ):
+            #print "%d / %d" % (xoffset, sizex-16-1)
             crop_box = (xoffset, 0, xoffset+16, 16)
             region = im.crop( crop_box )
             ni = Image.new( 'RGB', (16, 16) )
             ni.paste( region, (0, 0, 16, 16) )
             data = self._get_img_array( ni )
             self._sendPixels( data )
-            if xoffset < sizex-16-1:
-                #sleep( 0.000 * duration_ms )
-                pass
+            if( xoffset < sizex-16-1 ):
+                sleep( 0.001 * duration_ms )
             else:
-                sleep( 0.010 ) # allow longer delay on last _sendPixels (linux seems to kill pru process & leave half drawn screen on the ledgrid otherwise)
+                sleep( 0.020 ) # allow longer delay on last _sendPixels (linux seems to kill pru process & leave half drawn screen on the ledgrid otherwise)
 
     # ----
     def exploreSheet( self, ss ):
@@ -326,8 +326,15 @@ if __name__ == '__main__':
         minecraft_seq1.addFrame( minecraft_ss, 'wheat6', duration_ms=dur )
         minecraft_seq1.addFrame( minecraft_ss, 'wheat7', duration_ms=dur )
         minecraft_seq1.addFrame( minecraft_ss, 'wheat8', duration_ms=dur )
+        minecraft_seq1.addFrame( minecraft_ss, 'player_head', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'zombie_head', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'creeper_head', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'skeleton_head', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'wither_skeleton_head', duration_ms=550 )
+        minecraft_seq1.addFrame( minecraft_ss, 'multi_heads', duration_ms=650 )
         minecraft_seq1.addFrame( minecraft_ss, 'glass', duration_ms=550 )
         minecraft_seq1.addFrame( minecraft_ss, 'lava', duration_ms=450 )
+        minecraft_seq1.addFrame( minecraft_ss, 'cobweb', duration_ms=350 )
         minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
         minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_off', duration_ms=250 )
         minecraft_seq1.addFrame( minecraft_ss, 'tracks_redstone_on', duration_ms=250 )
@@ -340,6 +347,12 @@ if __name__ == '__main__':
         minecraft_seq1.addFrame( minecraft_ss, 'grass2', duration_ms=150 )
         minecraft_seq1.addFrame( minecraft_ss, 'grass3', duration_ms=150 )
         minecraft_seq1.addFrame( minecraft_ss, 'grass4', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'rose', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'dandelion', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'red_mushroom', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'mushroom', duration_ms=250 )
+        minecraft_seq1.addFrame( minecraft_ss, 'cake', duration_ms=450 )
+        minecraft_seq1.addFrame( minecraft_ss, 'furnace_lit', duration_ms=550 )
         minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
         minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_unlit', duration_ms=100 )
         minecraft_seq1.addFrame( minecraft_ss, 'redstone_torch_lit', duration_ms=100 )
@@ -497,13 +510,33 @@ if __name__ == '__main__':
         grid = Ledgrid()
 
         for i in range( 5 ):
+
+            # --- Mario ---
+
+            textbuilder_h.setColor( "random" );
+            string_image = textbuilder_h.createStringImage( " - MARIO -  ", False );
+            grid.showWideImage( string_image, duration_ms=4 );
             #grid.showSequence( mario_seq1, printinfo=False )
             grid.showSequence( mario_seq2, printinfo=False )
+
+            # --- Minecraft ---
+
+            textbuilder_h.setColor( "cyan" );
+            string_image = textbuilder_h.createStringImage( " - MINECRAFT -  ", False );
+            grid.showWideImage( string_image, duration_ms=4 );
             grid.showSequence( minecraft_seq1, printinfo=False )
+
+            # --- Frogger ---
 
             string_image = textbuilder_h.createFroggerStringImage( "  F R O G G E R", False );
             grid.showWideImage( string_image, duration_ms=0 );
             grid.showSequence( frogger_seq1, printinfo=False )
+
+            # --- Mrs Pacman ---
+
+            textbuilder_h.setColor( "red" );
+            string_image = textbuilder_h.createStringImage( " - MRS PACMAN -  ", False );
+            grid.showWideImage( string_image, duration_ms=4 );
 
             for i in range(4):
                 grid.showSequence( mrspacman_seq1a, printinfo=False )
